@@ -1,0 +1,61 @@
+{
+  "name": "@aioutlet/tests",
+  "version": "1.0.0",
+  "description": "Comprehensive test suite for AIOutlet microservices platform - API, Integration, E2E, Smoke, and Performance tests",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:api": "jest --config=jest.config.api.js",
+    "test:api:watch": "jest --config=jest.config.api.js --watch",
+    "test:api:auth": "jest --config=jest.config.api.js api/auth-service",
+    "test:api:user": "jest --config=jest.config.api.js api/user-service",
+    "test:api:message-broker": "jest --config=jest.config.api.js api/message-broker-service",
+    "test:integration": "jest --config=jest.config.integration.js",
+    "test:integration:watch": "jest --config=jest.config.integration.js --watch",
+    "test:e2e": "jest --config=jest.config.e2e.js",
+    "test:e2e:watch": "jest --config=jest.config.e2e.js --watch",
+    "test:smoke": "jest --config=jest.config.smoke.js",
+    "test:smoke:watch": "jest --config=jest.config.smoke.js --watch",
+    "test:performance": "jest --config=jest.config.performance.js",
+    "test:all": "npm run test:api && npm run test:integration && npm run test:e2e",
+    "test:ci": "npm run test:smoke && npm run test:api && npm run test:integration",
+    "test:nightly": "npm run test:all && npm run test:performance",
+    "services:up": "docker-compose up -d",
+    "services:down": "docker-compose down",
+    "services:logs": "docker-compose logs -f",
+    "services:status": "docker-compose ps",
+    "wait-for-services": "node scripts/wait-for-services.js",
+    "pretest": "npm run wait-for-services",
+    "pretest:api": "npm run wait-for-services",
+    "pretest:integration": "npm run wait-for-services",
+    "pretest:e2e": "npm run wait-for-services",
+    "pretest:smoke": "npm run wait-for-services"
+  },
+  "keywords": [
+    "testing",
+    "e2e",
+    "integration",
+    "api",
+    "smoke",
+    "performance",
+    "microservices",
+    "aioutlet"
+  ],
+  "author": "AIOutlet Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "babel-jest": "^30.0.0",
+    "jest": "^30.0.0",
+    "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
+    "wait-on": "^7.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
