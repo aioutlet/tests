@@ -6,12 +6,12 @@
 export default {
   testEnvironment: 'node',
   testTimeout: 10000, // API tests should be fast
-  verbose: true,
+  verbose: false,
   collectCoverageFrom: ['api/**/*.js', '!**/*.test.js', '!**/node_modules/**'],
   coverageDirectory: 'coverage/api',
   coverageReporters: ['text', 'lcov', 'html'],
   testMatch: ['**/api/**/*.api.test.js'],
-  setupFilesAfterEnv: ['<rootDir>/shared/config/setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/shared/config/setup-api.js'],
   transform: {
     '^.+\\.js$': 'babel-jest',
   },

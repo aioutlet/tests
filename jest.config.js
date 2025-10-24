@@ -5,7 +5,7 @@
 export default {
   testEnvironment: 'node',
   testTimeout: 30000,
-  verbose: true,
+  verbose: false,
   collectCoverageFrom: [
     'api/**/*.js',
     'integration/**/*.js',
@@ -19,10 +19,9 @@ export default {
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
   testMatch: ['**/api/**/*.test.js', '**/integration/**/*.test.js', '**/e2e/**/*.test.js', '**/smoke/**/*.test.js'],
-  setupFilesAfterEnv: ['<rootDir>/shared/config/setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/shared/config/setup-api.js'], // Use minimal setup by default
   transform: {
     '^.+\\.js$': 'babel-jest',
   },
-  maxWorkers: 1, // Run tests sequentially to avoid conflicts
-  testSequencer: '<rootDir>/shared/config/testSequencer.js',
+  maxWorkers: '50%',
 };

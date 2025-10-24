@@ -4,6 +4,8 @@
 import axios from 'axios';
 
 const MESSAGE_BROKER_SERVICE_URL = process.env.MESSAGE_BROKER_SERVICE_URL || 'http://localhost:4000';
+const MESSAGE_BROKER_SERVICE_HEALTH_URL =
+  process.env.MESSAGE_BROKER_SERVICE_HEALTH_URL || 'http://localhost:4000/health';
 const MESSAGE_BROKER_API_KEY = process.env.MESSAGE_BROKER_API_KEY || '7K9mP2xR5wN8qT4vL6jH3sF1dG9bY0zA';
 
 describe('Message Broker Service E2E Tests', () => {
@@ -15,7 +17,7 @@ describe('Message Broker Service E2E Tests', () => {
 
   describe('Health Check', () => {
     it('should return healthy status', async () => {
-      const response = await axios.get(`${MESSAGE_BROKER_SERVICE_URL}/health`);
+      const response = await axios.get(MESSAGE_BROKER_SERVICE_HEALTH_URL);
 
       expect(response.status).toBe(200);
       expect(response.data).toBeDefined();
@@ -26,7 +28,7 @@ describe('Message Broker Service E2E Tests', () => {
     });
 
     it('should include broker connection status in health check', async () => {
-      const response = await axios.get(`${MESSAGE_BROKER_SERVICE_URL}/health`);
+      const response = await axios.get(MESSAGE_BROKER_SERVICE_HEALTH_URL);
 
       expect(response.data.broker).toBeDefined();
       expect(response.data.broker.connected).toBe(true);

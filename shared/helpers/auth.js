@@ -8,7 +8,21 @@ const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'http://localhost:3001'
 const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:3002';
 
 /**
- * Register a new user
+ * Register a new user via auth-service
+ * Throws axios-style error for non-201 responses
+ */
+export async function registerUser(userData) {
+  const response = await post(`${AUTH_SERVICE_URL}/api/auth/register`, userData);
+  if (response.status !== 201) {
+    const error = new Error(`Registration failed: ${response.status}`);
+    error.response = response;
+    throw error;
+  }
+  return response.data;
+}
+
+/**
+ * Register a new user (returns response directly)
  */
 export async function register(userData) {
   const response = await post(`${AUTH_SERVICE_URL}/api/auth/register`, userData);
@@ -16,10 +30,16 @@ export async function register(userData) {
 }
 
 /**
- * Login user and get JWT token
+ * Login user and get JWT token (returns response directly)
  */
 export async function login(email, password) {
   const response = await post(`${AUTH_SERVICE_URL}/api/auth/login`, { email, password });
+  // For tests expecting errors, we need to throw with response attached
+  if (response.status >= 400) {
+    const error = new Error(`Login failed: ${response.status}`);
+    error.response = response;
+    throw error;
+  }
   return response;
 }
 
@@ -68,19 +88,11 @@ export async function verifyToken(token) {
   return response;
 }
 
-/**
- * Delete user (cleanup)
- */
-export async function deleteUser(userId, token) {
-  const response = await post(`${USER_SERVICE_URL}/api/users/${userId}`, {}, { token });
-  return response;
-}
-
 export default {
+  registerUser,
   register,
   login,
   getAuthToken,
   createAuthenticatedUser,
   verifyToken,
-  deleteUser,
 };

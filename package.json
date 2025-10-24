@@ -27,8 +27,6 @@
     "services:logs": "docker-compose logs -f",
     "services:status": "docker-compose ps",
     "wait-for-services": "node scripts/wait-for-services.js",
-    "pretest": "npm run wait-for-services",
-    "pretest:api": "npm run wait-for-services",
     "pretest:integration": "npm run wait-for-services",
     "pretest:e2e": "npm run wait-for-services",
     "pretest:smoke": "npm run wait-for-services"

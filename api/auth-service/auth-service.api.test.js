@@ -1,15 +1,51 @@
-// E2E Test: Auth Service
-// Tests authentication endpoints and functionality
+// API Test: Auth Service
+// Tests individual auth-service endpoints in isolation
+//
+// Dependencies:
+// - user-service: Auth-service calls user-service for user CRUD operations
+// - message-broker-service: Auth-service publishes events for audit, notifications, and analytics
+// Note: These are genuine dependencies for enterprise-grade auth functionality
 
 import axios from 'axios';
-import { generateTestUser, registerUser, loginUser, deleteUser, sleep } from '../helpers/testUtils.js';
+import { registerUser, login } from '../../shared/helpers/auth.js';
+import { generateTestUser, deleteUser, sleep } from '../../shared/helpers/user.js';
 
 const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'http://localhost:3001';
+const AUTH_SERVICE_HEALTH_URL = process.env.AUTH_SERVICE_HEALTH_URL || 'http://localhost:3001/health';
+const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:5000';
+const USER_SERVICE_HEALTH_URL = process.env.USER_SERVICE_HEALTH_URL || 'http://localhost:5000/health';
+const MESSAGE_BROKER_SERVICE_URL = process.env.MESSAGE_BROKER_SERVICE_URL || 'http://localhost:4000';
+const MESSAGE_BROKER_SERVICE_HEALTH_URL =
+  process.env.MESSAGE_BROKER_SERVICE_HEALTH_URL || 'http://localhost:4000/health';
 
-describe('Auth Service E2E Tests', () => {
+// Verify required services are available
+async function verifyServices() {
+  try {
+    await axios.get(AUTH_SERVICE_HEALTH_URL, { timeout: 2000 });
+    await axios.get(USER_SERVICE_HEALTH_URL, { timeout: 2000 });
+    await axios.get(MESSAGE_BROKER_SERVICE_HEALTH_URL, { timeout: 2000 });
+    return true;
+  } catch (error) {
+    console.error('❌ Required services not available:');
+    console.error(`   Auth Service: ${AUTH_SERVICE_URL}`);
+    console.error(`   User Service: ${USER_SERVICE_URL}`);
+    console.error(`   Message Broker: ${MESSAGE_BROKER_SERVICE_URL}`);
+    console.error('   Please start all required services before running tests.');
+    return false;
+  }
+}
+
+describe('Auth Service API Tests', () => {
+  beforeAll(async () => {
+    const servicesAvailable = await verifyServices();
+    if (!servicesAvailable) {
+      throw new Error('Required services are not available');
+    }
+  });
+
   describe('Health Check', () => {
     it('should return healthy status', async () => {
-      const response = await axios.get(`${AUTH_SERVICE_URL}/health`);
+      const response = await axios.get(AUTH_SERVICE_HEALTH_URL);
 
       expect(response.status).toBe(200);
       expect(response.data).toBeDefined();
@@ -156,7 +192,7 @@ describe('Auth Service E2E Tests', () => {
   describe('User Login', () => {
     it('should reject login with non-existent email', async () => {
       try {
-        await loginUser('nonexistent@example.com', 'Test@123456');
+        await login('nonexistent@example.com', 'Test@123456');
         fail('Should have thrown unauthorized error');
       } catch (error) {
         expect(error.response).toBeDefined();
@@ -169,7 +205,7 @@ describe('Auth Service E2E Tests', () => {
 
     it('should reject login with invalid email format', async () => {
       try {
-        await loginUser('invalid-email', 'Test@123456');
+        await login('invalid-email', 'Test@123456');
         fail('Should have thrown validation error');
       } catch (error) {
         expect(error.response).toBeDefined();
@@ -195,7 +231,7 @@ describe('Auth Service E2E Tests', () => {
 
     it('should reject login with empty credentials', async () => {
       try {
-        await loginUser('', '');
+        await login('', '');
         fail('Should have thrown validation error');
       } catch (error) {
         expect(error.response).toBeDefined();
