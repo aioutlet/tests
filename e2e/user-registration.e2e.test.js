@@ -1,16 +1,12 @@
 // E2E Test: User Registration Workflow
 // Tests the complete user registration flow from auth-service -> user-service -> notification
 
-import {
-  generateTestUser,
-  registerUser,
-  getUserByEmail,
-  deleteUser,
-  waitFor,
-  getEmailBySubject,
-  clearEmails,
-  sleep,
-} from '../helpers/testUtils.js';
+import { generateTestUser } from '../shared/helpers/user.js';
+import { registerUser, login } from '../shared/helpers/auth.js';
+import axios from 'axios';
+
+const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:3002';
+const MAILPIT_API_URL = process.env.MAILPIT_API_URL || 'http://localhost:8025/api/v1';
 
 describe('User Registration E2E Workflow', () => {
   let testUser;

@@ -15,7 +15,7 @@ const SERVICES = [
   { url: process.env.AUTH_SERVICE_URL || 'http://localhost:3001', name: 'Auth Service' },
   { url: process.env.USER_SERVICE_URL || 'http://localhost:3002', name: 'User Service' },
   { url: process.env.MESSAGE_BROKER_SERVICE_URL || 'http://localhost:4000', name: 'Message Broker' },
-  { url: process.env.NOTIFICATION_SERVICE_URL || 'http://localhost:3003', name: 'Notification Service' },
+  // Note: notification-service is a consumer-only service with no health endpoint
 ];
 
 /**
