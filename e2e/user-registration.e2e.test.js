@@ -1,12 +1,49 @@
 // E2E Test: User Registration Workflow
 // Tests the complete user registration flow from auth-service -> user-service -> notification
 
-import { generateTestUser } from '../shared/helpers/user.js';
+import { generateTestUser, getUserByEmail, deleteUser } from '../shared/helpers/user.js';
 import { registerUser, login } from '../shared/helpers/auth.js';
 import axios from 'axios';
 
 const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:3002';
 const MAILPIT_API_URL = process.env.MAILPIT_API_URL || 'http://localhost:8025/api/v1';
+
+// Helper functions
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const clearEmails = async () => {
+  try {
+    await axios.delete(`${MAILPIT_API_URL}/messages`);
+  } catch (error) {
+    console.warn('Could not clear emails:', error.message);
+  }
+};
+
+const getEmailBySubject = async (subject, toEmail) => {
+  try {
+    const response = await axios.get(`${MAILPIT_API_URL}/messages`);
+    const messages = response.data.messages || [];
+    return messages.find(
+      (msg) => msg.Subject.includes(subject) && msg.To && msg.To.some((to) => to.Address === toEmail)
+    );
+  } catch (error) {
+    console.warn('Could not get emails:', error.message);
+    return null;
+  }
+};
+
+const waitFor = async (fn, options = {}) => {
+  const { timeout = 10000, interval = 1000, timeoutMessage = 'Timeout' } = options;
+  const startTime = Date.now();
+
+  while (Date.now() - startTime < timeout) {
+    const result = await fn();
+    if (result) return result;
+    await sleep(interval);
+  }
+
+  throw new Error(timeoutMessage);
+};
 
 describe('User Registration E2E Workflow', () => {
   let testUser;
