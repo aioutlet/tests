@@ -74,6 +74,15 @@ export async function updateUser(userId, updateData, token = null) {
 }
 
 /**
+ * Update user directly (for test setup - bypasses authentication)
+ * Uses admin endpoint without auth for test purposes
+ */
+export async function updateUserDirectly(userId, updateData) {
+  const response = await put(`${USER_SERVICE_URL}/admin/users/${userId}`, updateData);
+  return response.data;
+}
+
+/**
  * Delete user
  */
 export async function deleteUser(userId, token = null) {

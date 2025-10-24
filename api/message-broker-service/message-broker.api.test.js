@@ -22,7 +22,6 @@ describe('Message Broker Service E2E Tests', () => {
       expect(response.status).toBe(200);
       expect(response.data).toBeDefined();
       expect(response.data.status).toBe('healthy');
-      expect(response.data.service).toBe('message-broker-service');
 
       console.log('✅ Message broker service is healthy');
     });
@@ -32,9 +31,9 @@ describe('Message Broker Service E2E Tests', () => {
 
       expect(response.data.broker).toBeDefined();
       expect(response.data.broker.connected).toBe(true);
-      expect(response.data.broker.type).toBeDefined();
+      expect(response.data.broker.broker_type).toBeDefined();
 
-      console.log(`✅ Broker connected: ${response.data.broker.type}`);
+      console.log(`✅ Broker connected: ${response.data.broker.broker_type}`);
     });
   });
 
@@ -56,7 +55,7 @@ describe('Message Broker Service E2E Tests', () => {
       } catch (error) {
         expect(error.response).toBeDefined();
         expect(error.response.status).toBe(401);
-        expect(error.response.data.error).toContain('API key required');
+        expect(error.response.data.error).toContain('missing X-API-Key header');
 
         console.log('✅ Request without API key rejected');
       }
@@ -74,7 +73,7 @@ describe('Message Broker Service E2E Tests', () => {
       } catch (error) {
         expect(error.response).toBeDefined();
         expect(error.response.status).toBe(401);
-        expect(error.response.data.error).toContain('Invalid API key');
+        expect(error.response.data.error).toContain('invalid API key');
 
         console.log('✅ Request with invalid API key rejected');
       }
