@@ -11,6 +11,8 @@
     "test:api:watch": "jest --config=jest.config.api.js --watch",
     "test:api:auth": "jest --config=jest.config.api.js api/auth-service",
     "test:api:user": "jest --config=jest.config.api.js api/user-service",
+    "test:api:product": "jest --config=jest.config.api.js api/product-service",
+    "test:api:admin": "jest --config=jest.config.api.js api/admin-service",
     "test:api:message-broker": "jest --config=jest.config.api.js api/message-broker-service",
     "test:integration": "jest --config=jest.config.integration.js",
     "test:integration:watch": "jest --config=jest.config.integration.js --watch",

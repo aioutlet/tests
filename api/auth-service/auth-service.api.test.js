@@ -12,8 +12,8 @@ import { generateTestUser, deleteUser, sleep } from '../../shared/helpers/user.j
 
 const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'http://localhost:3001';
 const AUTH_SERVICE_HEALTH_URL = process.env.AUTH_SERVICE_HEALTH_URL || 'http://localhost:3001/health';
-const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:5000';
-const USER_SERVICE_HEALTH_URL = process.env.USER_SERVICE_HEALTH_URL || 'http://localhost:5000/health';
+const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:3002';
+const USER_SERVICE_HEALTH_URL = process.env.USER_SERVICE_HEALTH_URL || 'http://localhost:3002/health';
 const MESSAGE_BROKER_SERVICE_URL = process.env.MESSAGE_BROKER_SERVICE_URL || 'http://localhost:4000';
 const MESSAGE_BROKER_SERVICE_HEALTH_URL =
   process.env.MESSAGE_BROKER_SERVICE_HEALTH_URL || 'http://localhost:4000/health';
