@@ -1,7 +1,10 @@
 // E2E Test: User Login Workflow
 // Tests user authentication flow
 
-import { generateTestUser, registerUser, loginUser, deleteUser, sleep } from '../helpers/testUtils.js';
+import { generateTestUser, deleteUser } from '../shared/helpers/user.js';
+import { registerUser, login as loginUser } from '../shared/helpers/auth.js';
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe('User Login E2E Workflow', () => {
   let testUser;
