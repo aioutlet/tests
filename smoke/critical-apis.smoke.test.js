@@ -49,11 +49,11 @@ describe('Critical API Endpoints', () => {
 
     it('/api/users endpoint should be accessible', async () => {
       try {
-        await axios.get(`${USER_SERVICE_URL}/api/users/test`);
+        await axios.get(`${USER_SERVICE_URL}/api/users`);
       } catch (error) {
-        // We expect 401, 403, or 404, not 500
+        // We expect 401 or 403 (auth required), not 500
         expect(error.response.status).not.toBe(500);
-        expect([401, 403, 404]).toContain(error.response.status);
+        expect([401, 403]).toContain(error.response.status);
       }
       console.log('✅ Users endpoint accessible');
     });

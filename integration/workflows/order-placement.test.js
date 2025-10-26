@@ -1,8 +1,8 @@
-// E2E Test: Complete Order Placement Workflow
+// E2E Test: Order Placement Workflow
 // Tests the full flow: Register → Login → Place Order → Verify Order
 
-import { generateTestUser, deleteUser } from '../shared/helpers/user.js';
-import { registerUser, login as loginUser } from '../shared/helpers/auth.js';
+import { generateTestUser, deleteUser } from '../../shared/helpers/user.js';
+import { registerUser, login as loginUser } from '../../shared/helpers/auth.js';
 import axios from 'axios';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

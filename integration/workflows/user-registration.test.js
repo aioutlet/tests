@@ -2,7 +2,9 @@
 // Tests integration between auth-service → user-service → message-broker-service → notification-service
 
 import axios from 'axios';
-import { generateTestUser, registerUser, getUserByEmail, deleteUser, waitFor, sleep } from '../helpers/testUtils.js';
+import { generateTestUser, getUserByEmail, deleteUser } from '../../shared/helpers/user.js';
+import { registerUser } from '../../shared/helpers/auth.js';
+import { waitFor, sleep } from '../../shared/helpers/api.js';
 
 const MESSAGE_BROKER_SERVICE_URL = process.env.MESSAGE_BROKER_SERVICE_URL || 'http://localhost:4000';
 const MESSAGE_BROKER_API_KEY = process.env.MESSAGE_BROKER_API_KEY || '7K9mP2xR5wN8qT4vL6jH3sF1dG9bY0zA';
