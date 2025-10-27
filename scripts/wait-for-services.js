@@ -10,21 +10,48 @@ dotenv.config();
 const MAX_RETRIES = 30;
 const RETRY_INTERVAL = 2000;
 
-// Services to check
+// Automatically read all services from environment variables
 const SERVICES = [
-  { url: process.env.AUTH_SERVICE_URL || 'http://localhost:3001', name: 'Auth Service' },
-  { url: process.env.USER_SERVICE_URL || 'http://localhost:3002', name: 'User Service' },
-  { url: process.env.MESSAGE_BROKER_SERVICE_URL || 'http://localhost:4000', name: 'Message Broker' },
-  // Note: notification-service is a consumer-only service with no health endpoint
-];
+  { url: process.env.AUTH_SERVICE_URL, healthUrl: process.env.AUTH_SERVICE_HEALTH_URL, name: 'Auth Service' },
+  { url: process.env.USER_SERVICE_URL, healthUrl: process.env.USER_SERVICE_HEALTH_URL, name: 'User Service' },
+  { url: process.env.ORDER_SERVICE_URL, healthUrl: process.env.ORDER_SERVICE_HEALTH_URL, name: 'Order Service' },
+  {
+    url: process.env.MESSAGE_BROKER_SERVICE_URL,
+    healthUrl: process.env.MESSAGE_BROKER_SERVICE_HEALTH_URL,
+    name: 'Message Broker Service',
+  },
+  {
+    url: process.env.NOTIFICATION_SERVICE_URL,
+    healthUrl: process.env.NOTIFICATION_SERVICE_HEALTH_URL,
+    name: 'Notification Service',
+  },
+  { url: process.env.PRODUCT_SERVICE_URL, healthUrl: process.env.PRODUCT_SERVICE_HEALTH_URL, name: 'Product Service' },
+  {
+    url: process.env.INVENTORY_SERVICE_URL,
+    healthUrl: process.env.INVENTORY_SERVICE_HEALTH_URL,
+    name: 'Inventory Service',
+  },
+  { url: process.env.CART_SERVICE_URL, healthUrl: process.env.CART_SERVICE_HEALTH_URL, name: 'Cart Service' },
+  { url: process.env.PAYMENT_SERVICE_URL, healthUrl: process.env.PAYMENT_SERVICE_HEALTH_URL, name: 'Payment Service' },
+  {
+    url: process.env.ORDER_PROCESSOR_SERVICE_URL,
+    healthUrl: process.env.ORDER_PROCESSOR_SERVICE_HEALTH_URL,
+    name: 'Order Processor Service',
+  },
+  { url: process.env.REVIEW_SERVICE_URL, healthUrl: process.env.REVIEW_SERVICE_HEALTH_URL, name: 'Review Service' },
+  { url: process.env.ADMIN_SERVICE_URL, healthUrl: process.env.ADMIN_SERVICE_HEALTH_URL, name: 'Admin Service' },
+  { url: process.env.AUDIT_SERVICE_URL, healthUrl: process.env.AUDIT_SERVICE_HEALTH_URL, name: 'Audit Service' },
+].filter((service) => service.url && service.healthUrl); // Only include services that have URLs defined
 
 /**
  * Check if a service is healthy
  */
-async function checkService(serviceUrl, serviceName) {
+async function checkService(serviceUrl, healthUrl, serviceName) {
+  const checkUrl = healthUrl || `${serviceUrl}/health`;
+
   for (let i = 0; i < MAX_RETRIES; i++) {
     try {
-      const response = await axios.get(`${serviceUrl}/health`, { timeout: 5000 });
+      const response = await axios.get(checkUrl, { timeout: 5000 });
       if (response.status === 200) {
         console.log(`✓ ${serviceName} is ready`);
         return true;
@@ -48,7 +75,7 @@ async function waitForServices() {
   const results = [];
 
   for (const service of SERVICES) {
-    const isReady = await checkService(service.url, service.name);
+    const isReady = await checkService(service.url, service.healthUrl, service.name);
     results.push({ service: service.name, ready: isReady });
   }
 
