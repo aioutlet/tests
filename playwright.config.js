@@ -43,13 +43,32 @@ export default defineConfig({
 
     // Video on failure
     video: 'retain-on-failure',
+
+    // Show browser window during test execution (not headless)
+    headless: false,
+
+    // Launch browser in fullscreen/maximized mode and disable automation bar
+    launchOptions: {
+      args: ['--start-maximized', '--start-fullscreen'],
+    },
+
+    // Use full screen viewport - set to null to use browser's full size
+    viewport: null,
+
+    // Slow down operations to see what's happening (in milliseconds)
+    // Uncomment to slow down test execution
+    // slowMo: 500,
   },
 
   // Configure projects for major browsers
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        // Don't use devices preset to avoid viewport override
+        channel: 'chrome',
+        // Keep the viewport and launch settings from global use config
+      },
     },
 
     // Uncomment to test in other browsers

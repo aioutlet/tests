@@ -10,7 +10,7 @@ export default {
   collectCoverageFrom: ['integration/**/*.js', '!**/*.test.js', '!**/node_modules/**'],
   coverageDirectory: 'coverage/integration',
   coverageReporters: ['text', 'lcov', 'html'],
-  testMatch: ['**/integration/**/*.integration.test.js'],
+  testMatch: ['**/integration/**/*.test.js'],
   setupFilesAfterEnv: ['<rootDir>/shared/config/setup.js'],
   transform: {
     '^.+\\.js$': 'babel-jest',
