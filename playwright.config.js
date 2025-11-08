@@ -94,9 +94,9 @@ export default defineConfig({
   ],
 
   // Run your local dev server before starting the tests
-  // Uncomment if you want Playwright to start the web-ui automatically
+  // Uncomment if you want Playwright to start the customer-ui automatically
   webServer: {
-    command: 'cd ../ui/web-ui && npm start',
+    command: 'cd ../ui/customer-ui && npm start',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
